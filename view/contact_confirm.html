@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    {{head}}
+    <title>Contact Confirm</title>
+  </head>
+  <body>
+    <h1>Contact Confirm</h1>
+    <form action="contact_thanks" method="post" class="row g-3 needs-validation" novalidate>
+      <div class="col-12">
+        <label for="form_name" class="form-label">お名前<span class="text-danger ms-1">*必須</span></label>
+        <div>{{name}}</div>
+      </div>
+      <div class="col-12">
+        <label for="form_email" class="form-label">メールアドレス<span class="text-danger ms-1">*必須</span></label>
+        <div>{{email}}</div>
+      </div>
+      <div class="col-12">
+        <label class="form-label d-block">職業</label>
+        <div>{{radio}}</div>
+      </div>
+      <div class="col-12">
+        <label class="form-label d-block">言語</label>
+        <div>{{checkbox}}</div>
+      </div>
+      <div class="col-12">
+        <label class="form-label d-block">住所地域</label>
+        <div>{{selectOne}}</div>
+      </div>
+      <div class="col-12">
+        <label class="form-label d-block">趣味・興味</label>
+        <div>{{selectMultiple}}</div>
+      </div>
+      <div class="col-12">
+        <label for="form_message" class="form-label">お問合せ内容</label>
+        <div>{{message}}</div>
+      </div>
+      <div class="col-12">
+        <label class="form-label d-block">添付ファイル</label>
+        <div>{{attachment}}</div>
+      </div>
+      <div class="col-12">
+        <a class="btn btn-dark me-3" href="javascript:history.back();">戻る</a>
+        <button class="btn btn-primary" type="submit">Send</button>
+      </div>
+      <input type="hidden" name="token" value="{{token}}">
+    </form>
+    {{footer}}
+  </body>
+</html>

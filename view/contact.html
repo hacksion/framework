@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    {{head}}
+    <title>contact</title>
+  </head>
+  <body>
+    <h1>contact {{URL}}</h1>
+    <form action="contact_confirm" method="post" class="row g-3 needs-validation" enctype="multipart/form-data" novalidate>
+      <div class="col-12">
+        <label for="form_name" class="form-label">お名前<span class="text-danger ms-1">*必須</span></label>
+        {{[class:Form;method:input;type:text;id:form_name;name:name;length:50;placeholder:山田太郎;required]}}
+      </div>
+      <div class="col-12">
+        <label for="form_email" class="form-label">メールアドレス<span class="text-danger ms-1">*必須</span></label>
+        {{[class:Form;method:input;type:email;id:form_email;name:email;placeholder:aaa@bbb.ccc;required]}}
+      </div>
+      <div class="col-12">
+        <label class="form-label d-block">職業</label>
+        {{[class:Form;method:radio;name:radio;title:その他,プログラマー,デザイナー]}}
+      </div>
+      <div class="col-12">
+        <label class="form-label d-block">言語</label>
+        {{[class:Form;method:checkbox;name:checkbox;title:HTML,CSS,JavaScript,PHP]}}
+      </div>
+      <div class="col-12">
+        <label class="form-label">住所地域</label>
+        {{[class:Form;method:selectOne;name:selectOne;default:選択してください;title:北海道,東北,関東,中部,北陸,関西,四国,中国,九州,沖縄;required]}}
+      </div>
+      <div class="col-12">
+        <label class="form-label">趣味・興味</label>
+        {{[class:Form;method:selectMultiple;name:selectMultiple;title:ゴルフ,サッカー,野球,テニス,ビリヤード,卓球,ボーリング;required]}}
+      </div>
+      <div class="col-12">
+        <label for="form_message" class="form-label">お問合せ内容<span class="text-danger ms-1">*必須</span></label>
+        {{[class:Form;method:textarea;id:form_message;name:message;required]}}
+      </div>
+      <div class="col-12">
+        <label for="form_attachment" class="form-label">添付ファイル<span class="ms-1 text-danger">{{error_msg}}</span></label>
+        {{[class:Form;method:input;type:file;id:form_attachment;name:attachment;accept:image/*,.pdf;file_size:500000]}}
+      </div>
+      <div class="col-12">
+        <button class="btn btn-primary" type="submit">Confirm</button>
+      </div>
+      <script>
+        (function () {
+          [].slice.call(document.querySelectorAll('.needs-validation')).forEach( form => {
+              form.addEventListener('submit', e => {
+                if (!form.checkValidity()) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }
+                form.classList.add('was-validated');
+              }, false);
+            });
+        })();
+      </script>
+      <input type="hidden" name="token" value="{{token}}">
+    </form>
+    
+    
+    {{footer}}
+  </body>
+</html>
