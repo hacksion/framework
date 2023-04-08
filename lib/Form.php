@@ -44,7 +44,7 @@ class Form
 
 	public function post() : void
     {
-        if(isset($_POST))
+        if(isset($_POST)){
             foreach($_POST as $name => $value){
 				$this->Session->set(['name' => $name, 'value' => $value]);
 			}
