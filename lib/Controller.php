@@ -48,7 +48,7 @@ class Controller extends ControllerService
     private function contact_confirm() : void
     {
         $Form = new Form;
-        $Form->post();
+        $Form->setSesFromPost();
         Token::verification($Form->getSes(['name' => 'token']), 'contact');
         $format = $Form->format([
             ['name' => 'name'],
@@ -67,7 +67,7 @@ class Controller extends ControllerService
     private function contact_thanks() : void
     {
         $Form = new Form;
-        $Form->post();
+        $Form->setSesFromPost();
         Token::verification($Form->getSes(['name' => 'token']), 'contact');
         $replace = $Form->format([
             ['name' => 'name', 'braces' => true],
@@ -78,9 +78,9 @@ class Controller extends ControllerService
             ['name' => 'selectMultiple', 'sep' => ',', 'braces' => true],
             ['name' => 'message', 'braces' => true],
         ]);
-        $dir = SERVER_DIR['VIEW'].'email.tpl/';
-        $receive_tpl = $dir.'receive'.TPL_EXT;
-        $confirm_tpl = $dir.'confirm'.TPL_EXT;
+        $dir = $this->SERVER_DIR['VIEW'].'email.tpl/';
+        $receive_tpl = $dir.'receive'.$this->TPL_EXT;
+        $confirm_tpl = $dir.'confirm'.$this->TPL_EXT;
         $Form->sendMail([
             'receive' => str_replace(
                 array_keys($replace),

@@ -1,7 +1,7 @@
 <?php
 namespace TM;
 
-class DB
+class DB extends Initial
 {
     protected $dbh = null;
 
@@ -13,11 +13,11 @@ class DB
     {
         try {
             $this->dbh = new \PDO(
-                DATABASE['TYPE'].':dbname='.DATABASE['NAME'].';
-                host='.DATABASE['HOST'].';
-                port='.DATABASE['PORT'],
-                DATABASE['USER'],
-                DATABASE['PASS']
+                $this->DATABASE['TYPE'].':dbname='.$this->DATABASE['NAME'].';
+                host='.$this->DATABASE['HOST'].';
+                port='.$this->DATABASE['PORT'],
+                $this->DATABASE['USER'],
+                $this->DATABASE['PASS']
             );
             $this->dbh->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             $this->dbh->query('SET NAMES UTF8');

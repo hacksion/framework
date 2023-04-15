@@ -1,7 +1,7 @@
 <?php
 namespace TM;
 
-class Form
+class Form extends Initial
 {
 	private $options = [];
 
@@ -42,7 +42,7 @@ class Form
 		$this->Session->set($options);
 	}
 
-	public function post() : void
+	public function setSesFromPost() : void
     {
         if(isset($_POST)){
             foreach($_POST as $name => $value){
@@ -61,7 +61,7 @@ class Form
 			$nl = $option['nl'] ?? null;
 			$file = $option['file'] ?? null;
 			$error = isset($option['error']) ? ['error' => $option['error']]:[];
-			$braces = isset($option['braces']) ? BRACES:['', ''];
+			$braces = isset($option['braces']) ? $this->BRACES:['', ''];
 			$value = $this->getSes($name += $unset);
 			if($sep)$value = implode($sep, $value);
 			if($nl)$value = nl2br($value);
@@ -100,7 +100,7 @@ class Form
 		$result = '';
 		$name = isset($options['name']) ? $options['name']:'';
 		$error = isset($options['error']) ? $options['error']:'';
-		$path = isset($options['path']) ? $options['path']:SERVER_DIR['TMP'];
+		$path = isset($options['path']) ? $options['path']:$this->SERVER_DIR['TMP'];
 		$max = isset($_POST['MAX_FILE_SIZE']) ? $_POST['MAX_FILE_SIZE']:$this->returnBytes(ini_get('upload_max_filesize'));
 		if($name && isset($_FILES[$name]) && !empty($_FILES[$name]['name'])){
 			if($max > $_FILES[$name]['size']){
@@ -138,7 +138,7 @@ class Form
 
 	public function rmdirAll(array $options) : void
 	{
-		$path = isset($options['path']) ? $options['path']:SERVER_DIR['TMP'];
+		$path = isset($options['path']) ? $options['path']:$this->SERVER_DIR['TMP'];
 		$dir = isset($options['dir']) ? $options['dir']:'';
 		if($dir){
 			chdir($path);
@@ -162,16 +162,16 @@ class Form
 			$PHPMailer = new \PHPMailer\PHPMailer\PHPMailer();
 			//$PHPMailer->SMTPDebug = 2;//デバッグをする場合
 			$PHPMailer->isSMTP();
-			$PHPMailer->Host        = MAIL_SERVER['HOST'];
-			$PHPMailer->Username    = MAIL_SERVER['USER'];
-			$PHPMailer->Password    = MAIL_SERVER['PASS'];
+			$PHPMailer->Host        = $this->MAIL_SERVER['HOST'];
+			$PHPMailer->Username    = $this->MAIL_SERVER['USER'];
+			$PHPMailer->Password    = $this->MAIL_SERVER['PASS'];
 			$PHPMailer->SMTPAuth    = true;
-			$PHPMailer->SMTPSecure  = MAIL_SERVER['ENCRPT'];
-			$PHPMailer->Port        = MAIL_SERVER['PORT'];
-			$PHPMailer->Encoding    = MAIL_SERVER['ENCODING'];
-			$PHPMailer->CharSet     = MAIL_SERVER['CHARSET'];
+			$PHPMailer->SMTPSecure  = $this->MAIL_SERVER['ENCRPT'];
+			$PHPMailer->Port        = $this->MAIL_SERVER['PORT'];
+			$PHPMailer->Encoding    = $this->MAIL_SERVER['ENCODING'];
+			$PHPMailer->CharSet     = $this->MAIL_SERVER['CHARSET'];
 			$PHPMailer->XMailer     = null;
-			$PHPMailer->Sender      = MAIL_SERVER['EMAIL'];
+			$PHPMailer->Sender      = $this->MAIL_SERVER['EMAIL'];
 			//添付ファイルがある場合
 			$del_dir = false;
 			if(isset($options['attachment_name'])){
@@ -180,16 +180,16 @@ class Form
 					$name = $this->Session->get($key);
 					$dir = $this->Session->get($name.'dir');
 					array_push($file_dir, $dir);
-					if(file_exists(SERVER_DIR['TMP'].$dir.'/'.$name)){
-						$PHPMailer->addAttachment(SERVER_DIR['TMP'].$dir.'/'.$name);
+					if(file_exists($this->SERVER_DIR['TMP'].$dir.'/'.$name)){
+						$PHPMailer->addAttachment($this->SERVER_DIR['TMP'].$dir.'/'.$name);
 						$del_dir = true;
 					}
 				}
 			}
 			//管理者へ送信
-			$PHPMailer->setFrom(MAIL_SERVER['EMAIL'], MAIL_SERVER['FROM_NAME']);
-			$PHPMailer->addAddress(MAIL_SERVER['EMAIL'], MAIL_SERVER['FROM_NAME']);
-			$PHPMailer->Subject     = SITE_NAME.'よりお問合せをいただきました';
+			$PHPMailer->setFrom($this->MAIL_SERVER['EMAIL'], $this->MAIL_SERVER['FROM_NAME']);
+			$PHPMailer->addAddress($this->MAIL_SERVER['EMAIL'], $this->MAIL_SERVER['FROM_NAME']);
+			$PHPMailer->Subject     = $this->SITE_NAME.'よりお問合せをいただきました';
 			$PHPMailer->Body        = isset($options['receive']) ? $options['receive']:'';
 			$PHPMailer->send();
 			$PHPMailer->clearAddresses();
@@ -197,9 +197,9 @@ class Form
 			//問合せ者への送信内容確認メール
 			$PHPMailer->Subject     = 'お問合せありがとうございます';
 			$PHPMailer->Body        = isset($options['confirm']) ? $options['confirm']:'';
-			$PHPMailer->setFrom(MAIL_SERVER['EMAIL'], MAIL_SERVER['FROM_NAME']);
+			$PHPMailer->setFrom($this->MAIL_SERVER['EMAIL'], $this->MAIL_SERVER['FROM_NAME']);
 			$PHPMailer->addAddress($this->Session->get('email'));
-			$PHPMailer->addReplyTo(MAIL_SERVER['FROM_NAME'], SITE_NAME.' お問合せフォーム');
+			$PHPMailer->addReplyTo($this->MAIL_SERVER['FROM_NAME'], $this->SITE_NAME.' お問合せフォーム');
 			$PHPMailer->send();
 			$PHPMailer->clearAddresses();
 			if($del_dir){
