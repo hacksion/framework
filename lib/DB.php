@@ -1,7 +1,7 @@
 <?php
 namespace TM;
 
-class DB extends Initial
+class DB
 {
     protected $dbh = null;
 
@@ -13,11 +13,11 @@ class DB extends Initial
     {
         try {
             $this->dbh = new \PDO(
-                $this->DATABASE['TYPE'].':dbname='.$this->DATABASE['NAME'].';
-                host='.$this->DATABASE['HOST'].';
-                port='.$this->DATABASE['PORT'],
-                $this->DATABASE['USER'],
-                $this->DATABASE['PASS']
+                DATABASE['TYPE'].':dbname='.DATABASE['NAME'].';
+                host='.DATABASE['HOST'].';
+                port='.DATABASE['PORT'],
+                DATABASE['USER'],
+                DATABASE['PASS']
             );
             $this->dbh->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             $this->dbh->query('SET NAMES UTF8');
@@ -27,22 +27,22 @@ class DB extends Initial
         }
     }
 
-    public function __destruct()
+    public function __destruct() : void
     {
         $this->dbh = null;
     }
 
-    public function setTransaction($boolean)
+    public function setTransaction(bool $boolean) : void
     {
         $this->transaction = $boolean;
     }
 
-    public function setFetchClass($boolean)
+    public function setFetchClass(bool $boolean) : void
     {
         $this->fetch_class = $boolean;
     }
 
-    protected function execute($type, $sql, array $data)
+    protected function execute(string $type, string $sql, array $data) : mixed
     {
         try {
             $type = mb_strtolower($type);
@@ -65,12 +65,12 @@ class DB extends Initial
         }
     }
 
-    public function query(string $sql, array $data)
+    public function query(string $sql, array $data) : mixed
     {
         return $this->execute(__FUNCTION__, $sql, $data);
     }
 
-    public function insert(string $table, array $records):int
+    public function insert(string $table, array $records) : int
     {
         $colmun = [];
         $placeholder = [];
@@ -87,7 +87,7 @@ class DB extends Initial
         return $result;
     }
 
-    public function update(string $table, array $condition, array $records):int
+    public function update(string $table, array $condition, array $records) : int
     {
         $column = [];
         $data = [];
@@ -107,7 +107,7 @@ class DB extends Initial
         return $result;
     }
 
-    public function delete(string $table, array $condition, $add_condition=null):int
+    public function delete(string $table, array $condition, $add_condition = null) : int
     {
         $result = 0;
         $where = [];
@@ -125,7 +125,7 @@ class DB extends Initial
         return $result;
     }
 
-    public function getUniqId(string $table_name, string $target_column, string $conditions):int
+    public function getUniqId(string $table_name, string $target_column, string $conditions) : int
     {
         $result = 0;
         if ($table_name && $target_column) {

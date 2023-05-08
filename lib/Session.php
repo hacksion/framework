@@ -10,7 +10,7 @@ class Session
 		$this->session_name = $session_name;
     }
 
-    public function get(string $name)
+    public function get(string $name) : mixed
     {
         return isset($_SESSION[$this->session_name][$name]) ? $_SESSION[$this->session_name][$name]:null;
     }

@@ -1,7 +1,7 @@
 <?php
 namespace TM;
 
-class ControllerService extends Initial
+class ControllerService
 {
     protected $html;
 
@@ -18,9 +18,9 @@ class ControllerService extends Initial
         $this->replace_init = $options['public_url'] ?? [];
         $router = preg_replace('/\?.+$/', '', $options['router']);
         $this->method = !isset($router[0]) ? 'index':end($router);
-        if($this->method  == $this->ADMIN_DIR)$this->method = 'admin';
-        $filepath = $this->SERVER_DIR['VIEW'].($router ? implode('.', $router):$this->method).$this->TPL_EXT;
-        $this->html = file_get_contents(file_exists($filepath) ? $filepath:$this->SERVER_DIR['VIEW'].'_404'.$this->TPL_EXT);
+        if($this->method  == ADMIN_DIR)$this->method = 'admin';
+        $filepath = SERVER_DIR['VIEW'].($router ? implode('.', $router):$this->method).TPL_EXT;
+        $this->html = file_get_contents(file_exists($filepath) ? $filepath:SERVER_DIR['VIEW'].'_404'.TPL_EXT);
         $this->getTags();
     }
 
@@ -32,7 +32,7 @@ class ControllerService extends Initial
     protected function repTags(array $options) : void
     {
         foreach($options as $key => $value)
-        $this->replace_tags[$this->BRACES[0].$key.$this->BRACES[1]] = $value;
+        $this->replace_tags[BRACES[0].$key.BRACES[1]] = $value;
     }
 
     private function getTags() : void
@@ -41,8 +41,8 @@ class ControllerService extends Initial
         if($matches[0]){ 
             $found_options = [];
             foreach($matches[0] as $m){
-                $val = ltrim($m, $this->BRACES[0]);
-                $val = rtrim($val, $this->BRACES[1]);
+                $val = ltrim($m, BRACES[0]);
+                $val = rtrim($val, BRACES[1]);
                 preg_match('/^\[[\s\S]*?\]$/us', trim($val), $options);
                 if($options)$found_options[$m] = $this->str2Array($options[0]);
                 $this->replace_tags[$m] = array_key_exists($val, $this->replace_init) ? $this->replace_init[$val]:$m;
@@ -50,12 +50,12 @@ class ControllerService extends Initial
             if($found_options)$this->addOn($found_options);
         }
         //共通テンプレートを読み込む
-        $tpl_dir = $this->SERVER_DIR['VIEW'].'tpl/';
+        $tpl_dir = SERVER_DIR['VIEW'].'tpl/';
         if (is_dir($tpl_dir)) {
             if ($dh = opendir($tpl_dir)) {
                 while (($file = readdir($dh)) !== false) {
                     if(filetype($tpl_dir . $file) == 'file'){
-                        $this->replace_tags[$this->BRACES[0].basename($file, $this->TPL_EXT).$this->BRACES[1]] = file_get_contents($tpl_dir.$file);
+                        $this->replace_tags[BRACES[0].basename($file, TPL_EXT).BRACES[1]] = file_get_contents($tpl_dir.$file);
                     }
                 }
                 closedir($dh);
