@@ -48,7 +48,8 @@ class DB
             $type = mb_strtolower($type);
             $result = 0;
             if ($this->transaction)$this->dbh->beginTransaction();
-            $ret = $this->dbh->prepare($sql)->execute($data);
+            $sth = $this->dbh->prepare($sql);
+            $ret = $sth->execute($place_holder);
             if ($type == 'query') {
                 $result = $this->fetch_class ?
                 $sth->fetchAll(\PDO::FETCH_CLASS, 'stdClass') : $sth->fetchAll(\PDO::FETCH_ASSOC);
