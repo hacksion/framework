@@ -21,7 +21,7 @@ class Controller extends ControllerService
 
     private function index() : void
     {
-        
+        $this->repTags(['test' => 'TEST!']);
     }
 
     private function admin() : void
