@@ -42,7 +42,7 @@ define('MAIL_SERVER', [
     'USER' => '',
     'PASS' => '',
     'EMAIL' => '',
-    'FROM_NAME' => 'My Site',
+    'FROM_NAME' => 'Hacksion',
     'ENCODING' => 'base64',
     'CHARSET' => 'UTF-8',
 ]);
@@ -61,7 +61,7 @@ require(PRIVATE_DIR . 'vendor/autoload.php');
 spl_autoload_register(function($cls){
     $class = explode("\\", $cls);
     $file = SERVER_DIR['LIB'] . end($class) . '.php';
-    if (is_readable($file))require $class_file_name;
+    if (is_readable($file))require $file;
 });
 /***************** debug ********************/
 function debug(){
