@@ -42,7 +42,7 @@ define('MAIL_SERVER', [
     'USER' => '',
     'PASS' => '',
     'EMAIL' => '',
-    'FROM_NAME' => 'My Web SIte',
+    'FROM_NAME' => 'My Site',
     'ENCODING' => 'base64',
     'CHARSET' => 'UTF-8',
 ]);
@@ -58,26 +58,16 @@ define('DATABASE', [
 /***************** composer autoload ********************/
 require(PRIVATE_DIR . 'vendor/autoload.php');
 /*****************  original class auto loader ********************/
-function autoloadClass($class){
-    $class_namespace = explode("\\", $class);
-    $class_file_name = SERVER_DIR['LIB'] . end($class_namespace) . '.php';
-    if (is_readable($class_file_name)) {
-        require $class_file_name;
-        return true;
-    } else {
-        return false;
-    }
-}
-spl_autoload_register('autoloadClass');
-
+spl_autoload_register(function($cls){
+    $class = explode("\\", $cls);
+    $file = SERVER_DIR['LIB'] . end($class) . '.php';
+    if (is_readable($file))require $class_file_name;
+});
 /***************** debug ********************/
 function debug(){
     $arr = debug_backtrace();
-    echo '<div>' . $arr[ 0 ][ 'file' ] . '  ' . $arr[ 0 ][ 'line' ] . '</div>';
-    $args = func_get_args();
-    echo '<pre style="border:1px solid #CCC; padding: 5px; font-family: monospace; font-size: 12px;">';
-    foreach ($args as $val) {
-        print_r($val);
-    }
+    echo '<div>' . $arr[ 0 ][ 'file' ] . '  ' . $arr[ 0 ][ 'line' ] . '</div>
+    <pre style="border:1px solid #CCC; padding: 5px; font-family: monospace; font-size: 12px;">';
+    foreach (func_get_args() as $val)print_r($val);
     echo '</pre>';
 }

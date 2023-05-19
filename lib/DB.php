@@ -27,7 +27,7 @@ class DB
         }
     }
 
-    public function __destruct() : void
+    public function __destruct()
     {
         $this->dbh = null;
     }
@@ -49,14 +49,12 @@ class DB
             $result = 0;
             if ($this->transaction)$this->dbh->beginTransaction();
             $sth = $this->dbh->prepare($sql);
-            $ret = $sth->execute($place_holder);
-            if ($type == 'query') {
+            $ret = $sth->execute($data);
+            if ($type == 'select') {
                 $result = $this->fetch_class ?
                 $sth->fetchAll(\PDO::FETCH_CLASS, 'stdClass') : $sth->fetchAll(\PDO::FETCH_ASSOC);
             } else {
-                if ($this->transaction) {
-                    $ret ? $this->dbh->commit() : $this->dbh->rollBack();
-                }
+                if ($this->transaction)$ret ? $this->dbh->commit() : $this->dbh->rollBack();
                 $result = $type == 'insert' ? $this->dbh->lastInsertId():$sth->rowCount();
             }
             return $result;
@@ -66,7 +64,7 @@ class DB
         }
     }
 
-    public function query(string $sql, array $data) : mixed
+    public function select(string $sql, array $data) : mixed
     {
         return $this->execute(__FUNCTION__, $sql, $data);
     }
