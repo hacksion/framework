@@ -17,10 +17,10 @@ class ControllerService
     {
         $this->replace_init = $options['public_url'] ?? [];
         $router = preg_replace('/\?.+$/', '', $options['router']);
-        $this->method = !isset($router[0]) ? 'index':end($router);
+        $this->method = !isset($router[0]) ? 'index':implode('_', $router);
         if($this->method  == ADMIN_DIR)$this->method = 'admin';
-        $filepath = SERVER_DIR['VIEW'].($router ? implode('.', $router):$this->method).TPL_EXT;
-        $this->html = file_get_contents(file_exists($filepath) ? $filepath:SERVER_DIR['VIEW'].'_404'.TPL_EXT);
+        $template = SERVER_DIR['VIEW'].$this->method.TPL_EXT;
+        $this->html = file_get_contents(file_exists($template) ? $template:SERVER_DIR['VIEW'].'_404'.TPL_EXT);
         $this->getTags();
     }
 
